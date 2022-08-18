@@ -1,48 +1,38 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 {
-  imports = [
-    ./hardware-configuration.nix
-  ];
+  imports = [ ./hardware-configuration.nix ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos";
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  hardware.enableAllFirmware = true;
+  nixpkgs.config.allowUnfree = true;
+
+  networking.hostName = "kiosk";
 
   time.timeZone = "Europe/Berlin";
-
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  # services.xserver.enable = true;
-  # services.xserver.layout = "eu";
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
   users.users.kiosk = {
     isNormalUser = true;
-    # extraGroups = [ "wheel" ];
-    packages = with pkgs; [
-      firefox
-    ];
-    hashedPassword = "$6$t6UIxVslKgiwDGlH$p4GRNXx2SWqFUjc0ifiGi0bq7EBTGkIA/.EJnTxc13AelwJnLAPBAvnIxbgUJs/RfE4NUGwRwlEFqGO9BH.rr/";
+    hashedPassword = "$6$hK0krpzTCXH3Yd.1$81czWYyv4U4aTcrMz0rRC7SDhTeIRZOzqxR1llmubr0orwR345ZlzhOxumSxAFupr2zLeSj/GTFX.kwr6Avyf1";
   };
 
   documentation.enable = false;
 
-  environment.systemPackages = with pkgs; [
-    neovim
-    wget
-  ];
+  systemd.services."cage-tty1" = {
+    after = [ "network-online.target" ];
+    serviceConfig.Restart = "always";
+    serviceConfig.ExecStart = lib.mkForce "${pkgs.cage}/bin/cage -- ${pkgs.firefox}/bin/firefox --private-window --kiosk https://beemobile.beethovenfest.de/de";
+  };
 
-  # programs.sway.enable = true;
   services.cage = {
     enable = true;
     user = "kiosk";
   };
+
   services.openssh.enable = true;
   system.stateVersion = "22.05";
 }
-
