@@ -1,5 +1,7 @@
 { config, pkgs, lib, ... }:
-{
+let
+  URL = "https://nixos.org/";
+in {
   imports = [ ./hardware-configuration.nix ];
 
   boot.loader.systemd-boot.enable = true;
@@ -28,7 +30,7 @@
     environment.MOZ_ENABLE_WAYLAND = "1";
     environment.MOZ_USE_XINPUT2 = "1";
     serviceConfig.Restart = "always";
-    serviceConfig.ExecStart = lib.mkForce "${pkgs.cage}/bin/cage -- ${pkgs.firefox}/bin/firefox --private-window --kiosk https://beemobile.beethovenfest.de/de";
+    serviceConfig.ExecStart = lib.mkForce "${pkgs.cage}/bin/cage -- ${pkgs.firefox}/bin/firefox --private-window --kiosk ${URL}";
   };
 
   services.cage = {
