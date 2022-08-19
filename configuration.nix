@@ -25,6 +25,8 @@
 
   systemd.services."cage-tty1" = {
     after = [ "network-online.target" ];
+    environment.MOZ_ENABLE_WAYLAND = "1";
+    environment.MOZ_USE_XINPUT2 = "1";
     serviceConfig.Restart = "always";
     serviceConfig.ExecStart = lib.mkForce "${pkgs.cage}/bin/cage -- ${pkgs.firefox}/bin/firefox --private-window --kiosk https://beemobile.beethovenfest.de/de";
   };
