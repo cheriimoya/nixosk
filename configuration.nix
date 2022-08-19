@@ -17,7 +17,8 @@
 
   users.users.kiosk = {
     isNormalUser = true;
-    hashedPassword = "$6$hK0krpzTCXH3Yd.1$81czWYyv4U4aTcrMz0rRC7SDhTeIRZOzqxR1llmubr0orwR345ZlzhOxumSxAFupr2zLeSj/GTFX.kwr6Avyf1";
+    # Generated via `mkpasswd -m sha-512`
+    hashedPassword = "$6$hK0krpzTCXH3Yd.1$81czWYyv4U4aTcrMz0rRC7SDhTeIRZOzqxR1llmubr0orwR345ZlzhOxumSxAFupr2zLeSj/GTFX.kwr6Avyf1"; # ricardo.
   };
 
   documentation.enable = false;
